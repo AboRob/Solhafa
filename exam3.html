@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج امتحان مستوى</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-left: 250px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 200px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            color: white;
+            margin-bottom: 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .sidebar a.active {
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .question {
+            margin: 20px 0;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: #f4f4f4;
+            padding: 10px;
+            z-index: 100;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .container {
+                margin-left: 0;
+                padding: 10px;
+                width: 100%;
+            }
+
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px;
+            }
+
+            .question {
+                font-size: 16px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="questionNav">
+        <!-- يتم إضافة أرقام الأسئلة هنا -->
+    </div>
+
+    <div class="container">
+        <div class="timer" id="timer">الوقت المتبقي: 60:00</div>
+        
+        <div id="questionsContainer">
+            <!-- الأسئلة سيتم إضافتها هنا -->
+        </div>
+
+        <!-- الأزرار -->
+        <div class="buttons">
+            <button onclick="submitExam()">إنهاء الامتحان</button>
+        </div>
+    </div>
+
+    <!-- زر الرجوع -->
+    <button class="back-button" onclick="goBack()">رجوع للصفحة السابقة</button>
+
+    <script>
+        // مؤقت الامتحان
+        let time = 60 * 60; // 60 دقيقة
+        let timerElement = document.getElementById('timer');
+        let interval;
+
+        function startTimer() {
+            interval = setInterval(() => {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                timerElement.innerHTML = `الوقت المتبقي: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                time--;
+
+                if (time < 0) {
+                    clearInterval(interval);
+                    submitExam(true); // استدعاء دالة إنهاء الامتحان عند انتهاء الوقت
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        // دالة الرجوع للصفحة السابقة
+        function goBack() {
+            window.history.back();
+        }
+
+        // دالة إضافة الأسئلة
+        const questions = [
+    {
+        question: "1. A: What _____ your favorite color?<br> B: Blue.",
+        options: ["a) is", "b) are", "c) do", "d) does"],
+        correctAnswer: "a"
+    },
+    {
+        question: "2. A: She usually _____ to the gym on Saturdays.<br> B: That's healthy.",
+        options: ["a) goes", "b) go", "c) going", "d) went"],
+        correctAnswer: "a"
+    },
+    {
+        question: "3. A: They _____ breakfast at 7 AM every day.<br> B: That's early!",
+        options: ["a) have", "b) has", "c) having", "d) had"],
+        correctAnswer: "a"
+    },
+    {
+        question: "4. A: _____ you live in London?<br> B: Yes, I do.",
+        options: ["a) Do", "b) Does", "c) Are", "d) Is"],
+        correctAnswer: "a"
+    },
+    {
+        question: "5. A: He _____ to the office yesterday.<br> B: Did he finish his work?",
+        options: ["a) went", "b) goes", "c) is going", "d) go"],
+        correctAnswer: "a"
+    },
+    {
+        question: "6. A: I _____ reading a good book now.<br> B: What's it about?",
+        options: ["a) am", "b) is", "c) are", "d) be"],
+        correctAnswer: "a"
+    },
+    {
+        question: "7. A: _____ you speak French?<br> B: No, only English.",
+        options: ["a) Can", "b) Could", "c) Would", "d) Do"],
+        correctAnswer: "a"
+    },
+    {
+        question: "8. A: They _____ to the cinema last weekend.<br> B: What did they watch?",
+        options: ["a) went", "b) go", "c) going", "d) gone"],
+        correctAnswer: "a"
+    },
+    {
+        question: "9. A: I haven't seen you _____ Monday.<br> B: I was away.",
+        options: ["a) since", "b) for", "c) from", "d) on"],
+        correctAnswer: "a"
+    },
+    {
+        question: "10. A: _____ you ever been to Italy?<br> B: Yes, twice.",
+        options: ["a) Have", "b) Are", "c) Do", "d) Did"],
+        correctAnswer: "a"
+    },
+    {
+        question: "11. A: She _____ her homework before dinner every day.<br> B: She's very disciplined.",
+        options: ["a) does", "b) do", "c) is doing", "d) did"],
+        correctAnswer: "a"
+    },
+    {
+        question: "12. A: I _____ be there by 6 PM.<br> B: Don't be late!",
+        options: ["a) will", "b) am", "c) was", "d) would"],
+        correctAnswer: "a"
+    },
+    {
+        question: "13. A: What _____ you like to eat?<br> B: A sandwich, please.",
+        options: ["a) would", "b) will", "c) do", "d) are"],
+        correctAnswer: "a"
+    },
+    {
+        question: "14. A: _____ your parents coming to visit?<br> B: Yes, next week.",
+        options: ["a) Are", "b) Is", "c) Does", "d) Do"],
+        correctAnswer: "a"
+    },
+    {
+        question: "15. A: She _____ to the music when I arrived.<br> B: She loves that song.",
+        options: ["a) was listening", "b) is listening", "c) listens", "d) listened"],
+        correctAnswer: "a"
+    },
+    {
+        question: "16. A: _____ did you buy this dress?<br> B: At the mall.",
+        options: ["a) Where", "b) When", "c) Why", "d) What"],
+        correctAnswer: "a"
+    },
+    {
+        question: "17. A: He _____ dinner when the phone rang.<br> B: Did he answer it?",
+        options: ["a) was cooking", "b) cooked", "c) cooks", "d) is cooking"],
+        correctAnswer: "a"
+    },
+    {
+        question: "18. A: They _____ tennis every Sunday.<br> B: That's a good routine.",
+        options: ["a) play", "b) plays", "c) played", "d) playing"],
+        correctAnswer: "a"
+    },
+    {
+        question: "19. A: I _____ you yesterday, but you didn't answer.<br> B: I was busy.",
+        options: ["a) called", "b) call", "c) calling", "d) have called"],
+        correctAnswer: "a"
+    },
+    {
+        question: "20. A: _____ he work in a bank?<br> B: Yes, he does.",
+        options: ["a) Does", "b) Do", "c) Is", "d) Has"],
+        correctAnswer: "a"
+    },
+    {
+        question: "21. A: I _____ to Paris next month.<br> B: That sounds exciting!",
+        options: ["a) am going", "b) go", "c) went", "d) will go"],
+        correctAnswer: "a"
+    },
+    {
+        question: "22. A: _____ you finished your homework?<br> B: Yes, just now.",
+        options: ["a) Have", "b) Do", "c) Are", "d) Did"],
+        correctAnswer: "a"
+    },
+    {
+        question: "23. A: They _____ in the garden when I saw them.<br> B: They enjoy being outside.",
+        options: ["a) were working", "b) are working", "c) worked", "d) work"],
+        correctAnswer: "a"
+    },
+    {
+        question: "24. A: What time _____ the train leave?<br> B: At 6 PM.",
+        options: ["a) does", "b) do", "c) is", "d) has"],
+        correctAnswer: "a"
+    },
+    {
+        question: "25. A: I _____ coffee in the morning.<br> B: Me too.",
+        options: ["a) like", "b) likes", "c) liking", "d) liked"],
+        correctAnswer: "a"
+    },
+    {
+        question: "26. A: _____ she come to the party last night?<br> B: Yes, she did.",
+        options: ["a) Did", "b) Does", "c) Was", "d) Is"],
+        correctAnswer: "a"
+    },
+    {
+        question: "27. A: They _____ go to the beach on Sundays.<br> B: It's their favorite place.",
+        options: ["a) usually", "b) used to", "c) are used to", "d) would"],
+        correctAnswer: "a"
+    },
+    {
+        question: "28. A: I haven't _____ that movie yet.<br> B: You should watch it.",
+        options: ["a) seen", "b) see", "c) seeing", "d) saw"],
+        correctAnswer: "a"
+    },
+    {
+        question: "29. A: We _____ to the new restaurant tonight.<br> B: I heard it's great.",
+        options: ["a) are going", "b) goes", "c) going", "d) went"],
+        correctAnswer: "a"
+    },
+    {
+        question: "30. A: _____ you ever been skiing?<br> B: No, I haven't.",
+        options: ["a) Have", "b) Are", "c) Do", "d) Did"],
+        correctAnswer: "a"
+    },
+    {
+        question: "31. A: They _____ for the bus when I saw them.<br> B: Did they catch it?",
+        options: ["a) were waiting", "b) waited", "c) waiting", "d) wait"],
+        correctAnswer: "a"
+    },
+    {
+        question: "32. A: _____ you coming to the party?<br> B: Yes, I'll be there.",
+        options: ["a) Are", "b) Do", "c) Will", "d) Have"],
+        correctAnswer: "a"
+    },
+    {
+        question: "33. A: He _____ never been to Japan.<br> B: He should go someday.",
+        options: ["a) has", "b) is", "c) does", "d) have"],
+        correctAnswer: "a"
+    },
+    {
+        question: "34. A: I _____ a new car last month.<br> B: That's exciting!",
+        options: ["a) bought", "b) buy", "c) buying", "d) have bought"],
+        correctAnswer: "a"
+    },
+    {
+        question: "35. A: _____ she studying now?<br> B: Yes, she has an exam tomorrow.",
+        options: ["a) Is", "b) Are", "c) Does", "d) Was"],
+        correctAnswer: "a"
+    }
+];
+
+
+        let userAnswers = {}; // لتخزين إجابات المستخدم
+        const questionsContainer = document.getElementById("questionsContainer");
+
+        questions.forEach((q, index) => {
+            const questionElement = document.createElement("div");
+            questionElement.classList.add("question");
+            questionElement.id = `question-${index}`;
+
+            questionElement.innerHTML = `
+                <p>${q.question}</p>
+                <div class="options">
+                    ${q.options.map((option, i) => `
+                        <label>
+                            <input type="radio" name="q${index}" value="${option[0]}" onchange="saveAnswer(${index}, '${option[0]}')">
+                            ${option}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+
+            questionsContainer.appendChild(questionElement);
+
+            // إضافة السؤال في القائمة الجانبية
+            const navLink = document.createElement("a");
+            navLink.href = `#question-${index}`;
+            navLink.innerText = `سؤال ${index + 1}`;
+            navLink.id = `nav-${index}`;
+            document.getElementById("questionNav").appendChild(navLink);
+        });
+
+        // دالة لحفظ إجابة المستخدم
+        function saveAnswer(questionIndex, answer) {
+            userAnswers[questionIndex] = answer;
+            document.getElementById(`nav-${questionIndex}`).classList.add('active');
+        }
+
+        // دالة إنهاء الامتحان
+        function submitExam(timeOut = false) {
+    clearInterval(interval); // إيقاف المؤقت
+    document.getElementById("timer").innerText = "الوقت انتهى";
+
+    questions.forEach((q, index) => {
+        const userAnswer = userAnswers[index];
+        const questionElement = document.getElementById(`question-${index}`);
+        const navLink = document.getElementById(`nav-${index}`);
+
+        if (userAnswer === q.correctAnswer) {
+            questionElement.style.backgroundColor = "#d4edda";
+            navLink.style.backgroundColor = "#28a745";
+        } else {
+            questionElement.style.backgroundColor = "#f8d7da";
+            navLink.style.backgroundColor = "#dc3545";
+
+            // عرض الإجابة التي اختارها الطالب بلون أحمر
+            questionElement.innerHTML += `<p style="color: red;">إجابتك: ${userAnswer}</p>`;
+            // عرض الإجابة الصحيحة بلون أخضر
+            questionElement.innerHTML += `<p style="color: green;">الإجابة الصحيحة: ${q.correctAnswer}</p>`;
+        }
+    });
+
+    if (!timeOut) {
+        alert("تم تقديم الامتحان! يمكنك مراجعة إجاباتك الآن.");
+    } else {
+        alert("انتهى الوقت! تم تقييم الإجابات.");
+    }
+}
+
+            if (!timeOut) {
+                alert("تم تقديم الامتحان! يمكنك مراجعة إجاباتك الآن.");
+            } else {
+                alert("انتهى الوقت! تم تقييم الإجابات.");
+            }
+        
+    </script>
+</body>
+</html>

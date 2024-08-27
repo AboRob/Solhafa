@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: #227524;
+    padding: 20px;
+    color: white;
+
+    
+}
+
+main {
+    padding: 40px 20px;
+}
+
+.buttons-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.main-button {
+    padding: 20px;
+    font-size: 1.5rem;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.main-button:hover {
+    background-color: #e64a19;
+}
+
+.main-button.coming-soon {
+    background-color: #b0bec5;
+}
+
+.main-button.active {
+    background-color: #4CAF50;
+}
+
+.ads-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ad-placeholder {
+    background-color: #ddd;
+    padding: 40px;
+    border-radius: 8px;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+<style>
+button.main-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+button.main-button:hover {
+    background-color: #0056b3;
+}
+</style>
+
+button.main-button {
+    background-color: #007bff; /* لون خلفية الزر */
+    color: white; /* لون النص */
+    padding: 10px 20px; /* الحشوة داخل الزر */
+    border: none; /* إزالة الحدود */
+    border-radius: 8px; /* زوايا مستديرة للزر */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* ظل خفيف للزر */
+    display: inline-flex; /* يجعل النص والأيقونة على نفس السطر */
+    align-items: center; /* محاذاة الأيقونة والنص بشكل عمودي */
+    justify-content: center; /* محاذاة النص والأيقونة في المنتصف */
+    flex-direction: row-reverse; /* يعكس اتجاه الأيقونة والنص */
+    cursor: pointer; /* شكل المؤشر يتحول عند التمرير إلى اليد */
+}
+
+button.main-button img {
+    margin-right: 10px; /* مسافة بين النص والأيقونة على اليمين */
+    height: 40px; /* حجم الأيقونة */
+}
